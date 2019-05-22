@@ -38,3 +38,19 @@ class Sudoku:
                         values.add(sudoku[3*i+a][3*j+b])
                 penalty += 9 - len(values)
         return(penalty)
+    
+    def mark_errors(self):
+        # return 9 lists, one for each row - each list contains those indices there either there is a duplicate in the columns or blocks
+        errors = []
+        for i in range(9):
+            row_errors = []
+            for j in range(9):
+                if [x[j] for x in self.values].count(self.values[i][j]) > 1:
+                    row_errors.append(j)
+                block_values = self.values[3*int(i/3)][3*int(j/3):3*(int(j/3) + 1)] + \
+                self.values[3*int(i/3) + 1][3*int(j/3):3*(int(j/3) + 1)] + \
+                self.values[3*int(i/3) + 2][3*int(j/3):3*(int(j/3) + 1)]
+                if block_values.count(self.values[i][j]) > 1:
+                    row_errors.append(j)
+            errors.append(list(set(row_errors)))
+        return errors
